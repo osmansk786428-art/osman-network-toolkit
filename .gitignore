@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+
+*.backup
+*.backup*
+*.before-*
+*.damaged-backup
+Network-Toolkit-*-backup.py
+
+network_report.txt
+network_report_export_*.txt
+*.final-backup

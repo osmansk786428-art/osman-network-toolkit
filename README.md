@@ -33,6 +33,21 @@ A Python networking toolkit for learning and basic network diagnostics in Termux
 16. Advanced Subnet Practice
 17. Offline Networking Practice
 18. Generate Sample Password
+19. SSL/TLS Certificate Checker
+20. Security Headers Checker
+
+## Security Features
+
+### SSL/TLS Certificate Checker
+- Checks TLS connectivity and verifies the server certificate.
+- Displays TLS version, cipher, certificate issuer, and expiration date when available.
+- Reports an approximate number of days until certificate expiry.
+
+### Security Headers Checker
+- Checks six HTTP response headers commonly used in web security.
+- Displays each header value when present.
+- Summarizes headers found and not found.
+- A missing header alone does not prove that a website is vulnerable.
 
 ## Requirements
 

@@ -2,54 +2,96 @@
 
 ## Network Toolkit V22 — Premium Wolf Edition
 
-Educational Python networking toolkit for Termux.
+An educational Python networking toolkit designed for Termux and compatible Python environments.
 
-## Features
+## ✨ Features
 
-- HTTP Header Checker
-- HTTP Status Checker
-- Security Headers Checker
-- Safe HTTP Request Adapter
-- HTTPS Certificate Verification
-- Public Destination Validation
-- Redirect Detection
-- Automated Unit Tests
+- HTTP response status checker
+- HTTP response header inspection
+- Security-header inspection
+- Safe HTTP request adapter
+- Public destination validation
+- DNS resolution checks
+- Private and loopback address rejection
+- HTTPS certificate verification
+- Redirect detection without automatic redirect following
+- Bounded response-body reading
+- Automated regression test suite
 
-## Requirements
+## 📋 Requirements
 
 - Python 3
-- Termux or compatible Python environment
-- Internet connection for live HTTP checks
+- Termux or another compatible Python environment
+- Internet access for live HTTP checks
 
-## Run the Toolkit
+No third-party Python package is required for the standard-library-based components.
+
+## 🚀 Installation
+
+Clone the repository:
 
 ```bash
-cd ~/osman-cyber-lab/python
+git clone https://github.com/osmansk786428-art/osman-network-toolkit.git
+cd osman-network-toolkit
+```
+
+## ▶️ Run the Toolkit
+
+From the project directory, run:
+
+```bash
 python Network-Toolkit-V22.py
 ```
 
-## Run Tests
+## 🧪 Run the Regression Tests
+
+Run the following command from the directory containing the test files:
 
 ```bash
-python -m unittest -v test_network_toolkit.py test_network_toolkit_extra.py test_pinned_connections.py test_safe_http_adapter.py test_safe_network.py test_safe_request_methods.py test_tls_verification.py test_v22_security.py test_v22_ui.py
+python -m unittest -v \
+  test_network_toolkit.py \
+  test_network_toolkit_extra.py \
+  test_pinned_connections.py \
+  test_safe_http_adapter.py \
+  test_safe_network.py \
+  test_safe_request_methods.py \
+  test_tls_verification.py \
+  test_v22_security.py \
+  test_v22_ui.py
 ```
 
-## Security Notes
+## 🔐 Security Notes and Limitations
 
-Security safeguards reduce certain risks but do not guarantee complete security.
-Security-header checks are informational and are not a complete security audit.
+- Security safeguards reduce certain risks but do not guarantee complete protection.
+- Security-header checks are informational and are not a complete security audit.
+- HTTPS certificate verification should remain enabled.
+- Passing the test suite does not prove the software is vulnerability-free.
+
 Use this toolkit only on systems you own or are authorized to test.
 
-## Project Status
+## 📁 Main Project Files
 
-Release candidate prepared.
-Previous regression test run: 68 tests passed.
-Test results do not constitute a formal security audit.
+| File | Purpose |
+|---|---|
+| `Network-Toolkit-V22.py` | Main terminal toolkit |
+| `safe_network.py` | Validated network requests |
+| `safe_http_adapter.py` | HTTP inspection adapter |
+| `test_*.py` | Automated regression tests |
 
-## Author
+## 📌 Project Status
+
+- Version: V22 release candidate
+- Branch: `main`
+- Test modules: 9
+- Latest recorded test result: 68 tests passed
+- Independent security audit: Not performed
+
+## 👨‍💻 Author
 
 **OSMAN CYBER LAB**
 
 Educational networking and cybersecurity project.
 
-Generated on: 2026-10-27
+## 📄 License
+
+No license has been specified. Do not assume unrestricted reuse or redistribution.

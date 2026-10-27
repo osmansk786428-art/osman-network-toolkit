@@ -633,6 +633,63 @@ def generate_sample_password():
         error("Length must be a number.")
 
 
+
+def ssl_certificate_checker():
+    heading("SSL/TLS CERTIFICATE CHECKER")
+
+    host = ask("Domain name (e.g. example.com): ").strip()
+    host = host.removeprefix("https://").removeprefix("http://")
+    host = host.split("/")[0].split(":")[0].strip()
+
+    if not valid_domain(host):
+        error("Enter a valid domain name.")
+        return
+
+    import ssl
+
+    context = ssl.create_default_context()
+    info("Connecting with certificate verification enabled...")
+
+    try:
+        with socket.create_connection((host, 443), timeout=8) as raw_socket:
+            with context.wrap_socket(raw_socket, server_hostname=host) as tls_socket:
+                cert = tls_socket.getpeercert()
+                cipher = tls_socket.cipher()
+                version = tls_socket.version()
+
+        subject = dict(item[0] for item in cert.get("subject", ()))
+        issuer = dict(item[0] for item in cert.get("issuer", ()))
+        expires = cert.get("notAfter", "Unknown")
+        expiry_date = datetime.datetime.strptime(
+            expires, "%b %d %H:%M:%S %Y %Z"
+        ) if expires != "Unknown" else None
+
+        ok(f"TLS connection verified for {host}")
+        info(f"TLS version: {version or 'Unknown'}")
+        info(f"Cipher: {cipher[0] if cipher else 'Unknown'}")
+        info(f"Certificate subject: {subject.get('commonName', 'Not provided')}")
+        info(f"Certificate issuer: {issuer.get('commonName', 'Not provided')}")
+        info(f"Certificate expires: {expires}")
+
+        if expiry_date:
+            remaining = expiry_date.replace(tzinfo=datetime.timezone.utc) - datetime.datetime.now(datetime.timezone.utc)
+            if remaining.total_seconds() < 0:
+                warn("Certificate expiry date is in the past.")
+            else:
+                ok(f"Approximate time until expiry: {remaining.days} days")
+
+        log("SSL/TLS Certificate Check", {
+            "host": host,
+            "tls_version": version,
+            "cipher": cipher[0] if cipher else None,
+            "issuer": issuer.get("commonName", "Not provided"),
+            "expires": expires,
+        })
+
+    except (OSError, ssl.SSLError, ValueError) as exc:
+        error(f"TLS check failed: {exc}")
+        info("Check the domain, internet connection, and server certificate.")
+
 def main():
     actions = {
         "1": check_ip_address, "2": network_calculator, "3": view_report,
@@ -643,6 +700,7 @@ def main():
         "12": export_report, "14": password_strength_checker,
         "15": ipv4_ipv6_validator, "16": subnet_practice,
         "17": offline_practice_mode, "18": generate_sample_password,
+        "19": ssl_certificate_checker,
     }
     while True:
         banner()
@@ -665,6 +723,7 @@ def main():
             ("16", "Advanced Subnet Practice", "green"),
             ("17", "Offline Networking Practice", "purple"),
             ("18", "Generate Sample Password", "yellow"),
+            ("19", "SSL/TLS Certificate Checker", "cyan"),
         ]
         for key, label, color in menu:
             print(f" {C[color]}[{key:>2}]{C['reset']} {C['white']}{label}{C['reset']}")
@@ -678,7 +737,7 @@ def main():
             action()
             pause()
         else:
-            error("Invalid option. Please choose a number from 1 to 18.")
+            error("Invalid option. Please choose a number from 1 to 19.")
             pause()
 
 

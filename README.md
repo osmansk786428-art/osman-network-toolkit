@@ -90,7 +90,11 @@ Use this toolkit only on systems you own or are authorized to test.
 
 **OSMAN CYBER LAB**
 
-Educational networking and cybersecurity project.
+Educational Networking & Cybersecurity Project
+
+Built with Python for Termux and compatible Python environments.
+
+🔗 GitHub: [osmansk786428-art](https://github.com/osmansk786428-art)
 
 ## 📄 License
 

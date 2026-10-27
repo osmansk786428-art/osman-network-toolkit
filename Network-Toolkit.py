@@ -690,6 +690,113 @@ def ssl_certificate_checker():
         error(f"TLS check failed: {exc}")
         info("Check the domain, internet connection, and server certificate.")
 
+
+def security_headers_checker():
+    heading("SECURITY HEADERS CHECKER")
+
+    target = ask("Website URL (e.g. https://example.com): ").strip()
+
+    if not target:
+        error("Please enter a website URL.")
+        return
+
+    from urllib.parse import urlparse, urlunparse
+    import urllib.request
+    import urllib.error
+
+    if "://" not in target:
+        target = "https://" + target
+
+    parsed = urlparse(target)
+
+    if parsed.scheme not in ("http", "https") or not parsed.hostname:
+        error("Enter a valid HTTP or HTTPS website URL.")
+        return
+
+    if parsed.username or parsed.password:
+        error("URLs containing usernames or passwords are not allowed.")
+        return
+
+    if parsed.port and not (1 <= parsed.port <= 65535):
+        error("Invalid port number.")
+        return
+
+    clean_url = urlunparse((
+        parsed.scheme, parsed.netloc, parsed.path or "/",
+        "", parsed.query, ""
+    ))
+
+    headers_to_check = {
+        "Strict-Transport-Security":
+            "Helps enforce HTTPS on supported browsers.",
+        "Content-Security-Policy":
+            "Helps restrict which resources a page can load.",
+        "X-Content-Type-Options":
+            "Helps prevent MIME-type sniffing.",
+        "X-Frame-Options":
+            "Can help reduce clickjacking risks.",
+        "Referrer-Policy":
+            "Controls how much referrer information is shared.",
+        "Permissions-Policy":
+            "Controls access to selected browser features.",
+    }
+
+    request = urllib.request.Request(
+        clean_url,
+        headers={"User-Agent": "OsmanCyberLab-SecurityHeaders/1.0"},
+        method="GET",
+    )
+
+    info("Requesting response headers...")
+
+    try:
+        with urllib.request.urlopen(request, timeout=10) as response:
+            response_headers = response.headers
+            final_url = response.geturl()
+            status = response.status
+
+    except urllib.error.HTTPError as exc:
+        response_headers = exc.headers
+        final_url = exc.geturl()
+        status = exc.code
+        warn(f"Website returned HTTP status {status}; checking available headers.")
+
+    except (urllib.error.URLError, TimeoutError, OSError, ValueError) as exc:
+        error(f"Request failed: {exc}")
+        info("Check the URL, internet connection, and website availability.")
+        return
+
+    ok(f"HTTP response received: {status}")
+    info(f"Final URL: {final_url}")
+
+    present = 0
+    missing = 0
+
+    for header, description in headers_to_check.items():
+        value = response_headers.get(header)
+
+        if value:
+            present += 1
+            ok(f"{header}: PRESENT")
+            print(f"    Value: {value}")
+        else:
+            missing += 1
+            warn(f"{header}: NOT FOUND")
+
+        print(f"    Purpose: {description}")
+
+    print()
+    info(f"Summary: {present} present, {missing} not found.")
+    warn("A missing header is not, by itself, proof of a vulnerability.")
+
+    log("Security Headers Check", {
+        "url": clean_url,
+        "final_url": final_url,
+        "http_status": status,
+        "present_headers": present,
+        "missing_headers": missing,
+    })
+
 def main():
     actions = {
         "1": check_ip_address, "2": network_calculator, "3": view_report,
@@ -701,6 +808,7 @@ def main():
         "15": ipv4_ipv6_validator, "16": subnet_practice,
         "17": offline_practice_mode, "18": generate_sample_password,
         "19": ssl_certificate_checker,
+        "20": security_headers_checker,
     }
     while True:
         banner()
@@ -724,6 +832,7 @@ def main():
             ("17", "Offline Networking Practice", "purple"),
             ("18", "Generate Sample Password", "yellow"),
             ("19", "SSL/TLS Certificate Checker", "cyan"),
+            ("20", "Security Headers Checker", "green"),
         ]
         for key, label, color in menu:
             print(f" {C[color]}[{key:>2}]{C['reset']} {C['white']}{label}{C['reset']}")
@@ -737,7 +846,7 @@ def main():
             action()
             pause()
         else:
-            error("Invalid option. Please choose a number from 1 to 19.")
+            error("Invalid option. Please choose a number from 1 to 20.")
             pause()
 
 

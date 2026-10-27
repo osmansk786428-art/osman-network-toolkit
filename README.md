@@ -78,6 +78,8 @@ cd ~/downloads
 curl -fL \
   https://github.com/osmansk786428-art/osman-network-toolkit/archive/refs/tags/V22.0.0.zip \
   -o osman-network-toolkit-22.0.0.zip
+```
+
 ### 1. ZIP File Verify
 
 ```bash

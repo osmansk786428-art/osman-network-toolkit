@@ -1,4 +1,4 @@
-name: Python Syntax Check
+name: Python Syntax and Unit Tests
 
 on:
   push:
@@ -7,14 +7,20 @@ on:
     branches: [main]
 
 jobs:
-  syntax-check:
+  test:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.x"
+
       - name: Check Python syntax
         run: python -m py_compile Network-Toolkit.py
+
+      - name: Run unit tests
+        run: python -m unittest discover -s tests -v

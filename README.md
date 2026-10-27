@@ -1,5 +1,15 @@
-# OSMAN CYBER LAB
-## Network Toolkit Ultra V5 — Premium Wolf Edition
+<div align="center">
+
+# 🐺 OSMAN CYBER LAB
+
+### Network Toolkit Ultra V5
+**Premium Wolf Edition**
+
+![Python](https://img.shields.io/badge/Python-3.x-blue?logo=python&logoColor=white)
+![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20Termux-green)
+![Purpose](https://img.shields.io/badge/Purpose-Educational-orange)
+
+</div>
 
 A Python networking toolkit for learning and basic network diagnostics in Termux.
 
